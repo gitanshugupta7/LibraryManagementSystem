@@ -21,12 +21,13 @@ from .decorators import unauthenticated_user, allowed_users,admin_only
 from django.contrib.auth.models import Group
 
 
+#the main app for the librarian to access the system
 @login_required(login_url='login')
 @admin_only
-def BookSearch(request): 
+def issuereturn(request): 
     form = SearchField()
-    if request.method == "POST":
-        form = SearchField(request.POST)
+    if request.method == "GET":
+        form = SearchField(request.GET)
         if form.is_valid():
             # populating()
             # print("Populated")
@@ -39,36 +40,20 @@ def BookSearch(request):
             if mango:
                 
                 c = mango.count()
-                return render(request, "BookSearch.html", {'form': form, 'bookdata' : mango, 'count' : c, 'result' : "searchvector"})
+                return render(request, "issuereturn.html", {'form': form, 'bookdata' : mango, 'count' : c, 'result' : "searchvector"})
                 
-
             else:
                 apple = Title.objects.annotate(similarity=TrigramSimilarity('author', query) + TrigramSimilarity('title', query),).filter(similarity__gt=0.12) .order_by('-similarity')
                 c = apple.count()
-                return render(request, "BookSearch.html", {'form': form, 'bookdata' : apple, 'count' : c, 'result' : "trigram"})
+                return render(request, "issuereturn.html", {'form': form, 'bookdata' : apple, 'count' : c, 'result' : "trigram"})
 
-                # elif apple.count() < 3:
-                #     apple = Title.objects.annotate(similarity=TrigramSimilarity('author', query) + TrigramSimilarity('title', query),).filter(similarity__gt=0.1) .order_by('-similarity')
-                    
-                #     return render(request, "BookSearch.html", {'form': form, 'bookdata' : apple})
 
-                # elif apple.count() < 3:
-                #     apple = Title.objects.annotate(similarity=TrigramSimilarity('author', query) + TrigramSimilarity('title', query),).filter(similarity__gt=0.1) .order_by('-similarity')
-                    
-                #     return render(request, "BookSearch.html", {'form': form, 'bookdata' : apple})
-
-                # else:
-                #    apple = Title.objects.annotate(similarity=TrigramSimilarity('author', query) + TrigramSimilarity('title', query),).filter(similarity__gt=0.1) .order_by('-similarity')
-                   
-                #    return render(request, "BookSearch.html", {'form': form, 'bookdata' : apple})
-            
-
-    return render(request, "BookSearch.html", {'form': form})
+    return render(request, "issuereturn.html", {'form': form})
 
 
 
 
-
+#login page will be rendered by this function
 @unauthenticated_user
 def loginUser(request):
     if request.method == 'POST':
@@ -79,37 +64,40 @@ def loginUser(request):
 
         if user is not None:
             login(request, user)
-            return redirect('BookSearch')
+            return redirect('issuereturn')
         else:
-            messages.info(request, 'Username OR password is incorrect')
+            messages.info(request, 'Username or password is incorrect')
 
     context = {}
     return render(request, 'login.html', context)
 
 
+#this is to logout from the system
 def logoutUser(request):
     logout(request)
     return redirect('login')
 
 
 
+#registration function for students only
 @unauthenticated_user
 def register(request):
     form = CreateUserForm()
     profile_form = StudentProfileForm()
+
     if request.method == 'POST':
+
         form = CreateUserForm(request.POST)
         profile_form = StudentProfileForm(request.POST)
-        #profile_form = UserProfileForm(request.POST)
 
         if form.is_valid() and profile_form.is_valid():
+
             user = form.save()
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
             group = Group.objects.get(name='student')
             user.groups.add(group)
-
             username = form.cleaned_data.get('username')
             messages.success(request, 'Account was created for ' + username)
             return redirect('login')
@@ -119,7 +107,7 @@ def register(request):
 
 
 
-
+#registration function for teachers only
 @unauthenticated_user
 def teacher_register(request):
     form = CreateUserForm()

@@ -1,6 +1,11 @@
 .container {
   color: rgba(27, 34, 45, 0.87);
-  max-width: 1366px; }
+  max-width: 1920px; }
+
+.display-6 {
+  font-size: 1rem;
+  font-weight: 300;
+  margin-top: 0; }
 
 .card {
   border: none;
@@ -10,11 +15,11 @@
 .form-control {
   border: none;
   border-radius: .5rem;
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px; }
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px; }
 
 .btn {
-  box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
-  border-radius: .5rem; }
+  box-shadow: rgba(109, 109, 109, 0.08) 0px 4px 12px;
+  border-radius: 0.5rem; }
 
 .my-auto {
   margin-top: auto;

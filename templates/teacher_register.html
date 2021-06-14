@@ -4,94 +4,109 @@
 
 {% block extracss %}
 
-  <link rel="stylesheet" href="{% static 'css/register.css' %}" type="text/css">
 
 {% endblock %}
 
 
 {% block restcontainer %}
 
-    <div class="row">
+<!--This page is hidden from the website and can be accessed only via special url, this page
+can only be accessed by teachers for registrations into the system-->
 
-        <div class="apply-header col-md-12">
-            <p>REGISTRATION FORM TEACHER</p>
+<div class="row">
+
+	<div class="col-md-4 col-12 mx-auto">
+
+	<!--For horizontal align in mobile devices-->
+	<div class="col-12 mt-5 d-flex justify-content-center d-md-none">
+		<img src="{% static 'assets/logo.png' %}" class="logosize">
+	</div>
+	  
+	<!--For vertical align in desktops-->
+    <div class="col-md-4 mt-md-5 pt-md-5 mt-md-3 d-md-flex align-items-lg-center d-none">
+    	<img src="{% static 'assets/logo.png' %}" style="width: 400%; height: auto;">
+	</div>
+
+	</div>
+  
+	
+	<form method="POST" class="card col-md-7 col-10 mx-auto applyform p-md-4 p-3 p mt-3">
+		{% csrf_token %}
+		<h4 class="mb-5 mt-2 ml-2">Hola Professor,</h4>
+
+		<div class="row ">
+			<div class="col-md-6 mb-3">
+				<label class="mb-2 mt-2 h6">{{form.username.label}}</label>
+				{{form.username}}
+			</div> 
+			<div class="col-md-6 mb-3">
+				<label class="mb-2 mt-2 h6">{{profile_form.unique_id.label}}</label>
+				{{profile_form.unique_id}}
+		    </div>
+	    </div>
+
+		<div class="row">
+			<div class="col-md-6 mb-3">
+				<label class="mb-2 mt-2 h6">{{form.first_name.label}}</label>
+				{{form.first_name}}
+			</div>
+	    
+			<div class="col-md-6 mb-3">
+				<label class="mb-2 mt-2 h6">{{form.last_name.label}}</label>
+				{{form.last_name}}
+			</div>
+	    </div>
+
+		<div class="row">
+			<div class="col-md-6 mb-3">
+				<label class="mb-2 mt-2 h6">{{form.password1.label}}</label>
+				{{form.password1}}
+			</div>
+			<div class="col-md-6 mb-3">
+				<label class="mb-2 mt-2 h6">{{form.password2.label}}</label>
+				{{form.password2}}
+			</div>
+	    </div>
+
+		<div class="row">
+			<div class="col-md-6 mb-3">
+				<label class="mb-2 mt-2 h6">{{profile_form.phone_number.label}}</label>
+				{{profile_form.phone_number}}
+			</div>
+
+			<div class="col-md-6 mb-3">
+				<label class="mb-2 mt-2 h6">{{profile_form.address.label}}</label>
+				{{profile_form.address}}
+			</div>
+	    </div>
+		
+
+		<div class="mb-3 mt-3 row">
+    		<button type="submit" class="h5 btn btn-primary col-md-3 col-10 mx-auto">Register</button>
         </div>
 
-					<form method="POST" class="col-md-8 offset-md-2 col-10 offset-1 applyform">
-						{% csrf_token %}
+		<div class="row align-self-center">
+			<p class="col-md-12 col-12 mx-auto h6">Already have an account?<span><a href="{% url 'login' %}" class="ml-2">Login</a></span></p>
+		</div>
 
-						{{ profile_form.misID.errors }}
+		<div class="row">
+			<p class="col-10">{{form.errors}}</p>
+		</div>
 
-						<div>
-							<p>{{form.username.label}}</p>
-							{{form.username}}
-						</div>
-						<div>
-							<p>{{form.email.label}}</p>
-							{{form.email}}
-						</div>
-						<div>
-							<p>{{form.first_name.label}}</p>
-							{{form.first_name}}
-						</div>
-						<div>
-							<p>{{form.last_name.label}}</p>
-							{{form.last_name}}
-						</div>
-
-						<div>
-							<p>{{form.password1.label}}</p>
-							{{form.password1}}
-						</div>
-						<div>
-							<p>{{form.password2.label}}</p>
-							{{form.password2}}
-						</div>
-						<div>
-							<p>{{profile_form.phone_number.label}}</p>
-							{{profile_form.phone_number}}
-						</div>
-						<div>
-							<p>{{profile_form.address.label}}</p>
-							{{profile_form.address}}
-						</div>
-						<div>
-						    <p>{{profile_form.joining.label}}</p>
-							{{profile_form.joining}}
-						</div>
-
-				   		<div class="justify-content-center login_container">
-				 			<input type="submit" value="Register Account">
-				   		</div>
-
-                        <div class="col-md-12" style="padding-left: 0;">
-                            <p>Already have an account?<span>  <a href="{% url 'login' %}" class="ml-2">Login</a></span></p>
-                        </div>
-
-                        <div class="col-md-12" style="padding-left: 0;">
-                        {{form.errors}}
-                        {% comment %} for form errors  {% endcomment %}
-                        </div>
-
-					</form>
-
-       </div>
+	</form>
+        
+</div>
 
 
-  <script src="{% static 'js/scheme.js' %}"></script>
-  <script>
+<script>
 
-    var form_fields = document.getElementsByTagName('input')
-    form_fields[1].placeholder='Username';
-    form_fields[2].placeholder='Email';
-    form_fields[3].placeholder='FIRST NAME';
-    form_fields[4].placeholder='LAST NAME'
-    form_fields[5].placeholder='Enter Password';
-    form_fields[6].placeholder='Confirm Password';
-    form_fields[7].placeholder='Phone Number';
-    form_fields[8].placeholder='Address';
-    form_fields[9].placeholder='Unique ID in your ID Card';
+    var c = document.getElementsByTagName("input");
+    var i = 0;
+    for(i = 0; i < c.length; i++){
+        c[i].classList.add("form-control");
+    }
 
 </script>
+
 
 {% endblock %}

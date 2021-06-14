@@ -1,0 +1,81 @@
+/*This css is used only in librarianfeatures page*/
+.active {
+  background-color: white; }
+
+.sidebar {
+  background-color: #E9ECF5;
+  display: grid;
+  position: relative;
+  align-items: center; }
+  .sidebar .arrow {
+    width: 1rem;
+    height: 1rem;
+    box-sizing: border-box;
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%) rotate(-135deg);
+    cursor: pointer; }
+    .sidebar .arrow::before {
+      content: '';
+      width: 100%;
+      height: 100%;
+      border-width: .8vmin .8vmin 0 0;
+      border-style: solid;
+      border-color: #0d276b;
+      transition: .2s ease;
+      display: block;
+      transform-origin: 100% 0; }
+    .sidebar .arrow:hover::after {
+      transform: rotate(45deg);
+      border-color: orange;
+      height: 120%; }
+    .sidebar .arrow:hover::before {
+      border-color: orange;
+      transform: scale(0.8); }
+  .sidebar .booksicon {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -45%); }
+    .sidebar .booksicon svg {
+      height: 2.5rem;
+      width: 2.5rem;
+      cursor: pointer; }
+    .sidebar .booksicon div:hover {
+      background-color: white; }
+
+/*This css is used for issue/return feature*/
+.search-results form .searchbutton {
+  background-color: #007BFF !important;
+  box-shadow: none;
+  color: white;
+  border-radius: 0 2rem 2rem 0;
+  padding-bottom: 0.55rem;
+  width: 6rem !important;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; }
+.search-results form input {
+  border-radius: 2rem;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  outline: none !important;
+  border: none; }
+.search-results form .col-md-8 {
+  padding-right: 0; }
+.search-results form .col-md-4 {
+  padding-left: 0;
+  margin-left: -0.89rem; }
+.search-results h5 {
+  margin-bottom: 0.2rem; }
+.search-results .btn {
+  width: 5rem;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  color: #363A52;
+  border: none; }
+  .search-results .btn:hover {
+    filter: brightness(95%); }
+
+@media (max-width: 768px) {
+  body {
+    display: none; } }
+
+/*# sourceMappingURL=librarianfeatures.css.map */
