@@ -3,5 +3,8 @@
         "./LibraryManagementSystem"
     ],
     "python.pythonPath": "C:\\Users\\GITANSHU\\.conda\\envs\\env\\python.exe",
+    "python.analysis.extraPaths": [
+        "./LibraryManagementSystem"
+    ],
 
 }

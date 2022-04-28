@@ -90,6 +90,7 @@ def register(request):
         form = CreateUserForm(request.POST)
         profile_form = StudentProfileForm(request.POST)
 
+        print("HelloRegister")
         if form.is_valid() and profile_form.is_valid():
 
             user = form.save()
@@ -99,6 +100,7 @@ def register(request):
             group = Group.objects.get(name='student')
             user.groups.add(group)
             username = form.cleaned_data.get('username')
+            print(form.cleaned_data.get('username'))
             messages.success(request, 'Account was created for ' + username)
             return redirect('login')
 

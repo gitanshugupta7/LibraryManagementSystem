@@ -8,11 +8,11 @@ def populating():
     uidc = 500000
     acc = 11000
     j = 0
-    while(j <= 700):
+    while(j <= 862):
         title = Title(
             uid = uidc,
-            title = data['title'][j],
-            author = data['author'][j],
+            title = data['Title'][j],
+            author = data['Author'][j],
             total_book_count = 10,
         )
         title.save()
