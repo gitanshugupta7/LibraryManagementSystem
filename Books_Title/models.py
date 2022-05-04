@@ -72,7 +72,7 @@ class Log(models.Model):
     acc_no = models.IntegerField(default = 0)
     doi = models.DateField(auto_now_add = True)
     dor = models.DateField();
-    issue_mode = models.CharField(choices=APPROVAL_CHOICES)
+    issue_mode = models.CharField(max_length= 15, choices=APPROVAL_CHOICES)
     edor = models.DateField()
 
     
