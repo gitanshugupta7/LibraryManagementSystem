@@ -12,11 +12,10 @@
         {{form.searchinput}}
         </div>
         <div class="col-md-4" id="">
-        <button class="btn searchbutton" type="submit">Search</button>
+        <button class="btn searchbutton" type="submit" name="Search">Search</button>
         </div>
     </form>
-
-    <a href="http://127.0.0.1:8000/logout/">Click Here To Logout</a>
+    <div class="mt-5"></div>
     <!-- <h2>{{count}}</h2> -->
     <!-- <h2>{{result}}</h2> -->
 
@@ -30,8 +29,8 @@
           <p class="display-6">{{ i.author}}</p>
 
          <div class="mt-2">
-            <button style="background-color: #E9ECF5;" type="submit" class="btn btn-primary float-right ml-2">Return</button>
-            <button style="background-color: #00CA80" submit" class="btn btn-primary float-right mr-1">Issue</button>
+            <button style="background-color: #E9ECF5;" type="submit" class="btn btn-primary float-right ml-2" data-toggle="modal" data-target="#exampleModalCenter1">Return</button>
+            <button style="background-color: #00CA80" submit" class="btn btn-primary float-right mr-1" data-toggle="modal" data-target="#exampleModalCenter2">Issue</button>
          </div>
         </li>
         
@@ -50,6 +49,70 @@
       
     {% endfor %}
     </ul>
+
+    <!--This is the modal class for returning books-->
+    <div class="modal fade" id="exampleModalCenter1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Return</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <!--Modal Body-->
+          <div class="modal-body">
+
+            <div class="container-fluid">
+              <form method="GET" class="row">
+                {% csrf_token %} 
+                <div class="col-md-8">
+                {{returnform.return_acc_no}}
+                </div>
+                <div class="col-md-8" id="">
+                <button class="btn" type="submit" name="Search">Return</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <!--Modal Body-->
+        </div>
+
+      </div>
+    </div>
+
+    <!--This is the modal class for issuing books-->
+    <div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Issue</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <div class="container-fluid">
+              <form method="GET" class="row">
+                {% csrf_token %} 
+                <div class="col-md-8">
+                {{issueform.issue_registration_no}}
+                </div>
+                <div class="col-md-8">
+                {{issueform.acc_no}}
+                </div>
+                <div class="col-md-8" id="">
+                <button class="btn" type="submit" name="Search">Issue</button>
+                </div>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
 
 </div>
 

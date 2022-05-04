@@ -1,3 +1,5 @@
+from ast import Return
+from asyncio.windows_events import NULL
 from django.contrib.postgres.search import *
 from django.contrib.postgres.operations import  *
 from .models import *
@@ -15,7 +17,7 @@ from datetime import date, timedelta, datetime
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-import _datetime
+import datetime
 from .forms import CreateUserForm
 from .decorators import unauthenticated_user, allowed_users,admin_only
 from django.contrib.auth.models import Group
@@ -26,29 +28,95 @@ from django.contrib.auth.models import Group
 @admin_only
 def issuereturn(request): 
     form = SearchField()
+    issueform = IssueForm()
+    returnform = ReturnForm()
     if request.method == "GET":
-        form = SearchField(request.GET)
-        if form.is_valid():
-            # populating()
-            # print("Populated")
-            query = form.cleaned_data.get('searchinput')
-            start = Title()
+        if request.GET.get('searchinput'):
+            form = SearchField(request.GET)
+            if form.is_valid():
+                # populating()
+                # print("Populated")
+                query = form.cleaned_data.get('searchinput')
+                start = Title()
 
-            vector = SearchVector('title', weight = 'B', config = 'english') + SearchVector('author', weight = 'A', config = 'english')
-            mango = Title.objects.annotate(search = vector).filter(search = SearchQuery(query))
-            
-            if mango:
+                vector = SearchVector('title', weight = 'B', config = 'english') + SearchVector('author', weight = 'A', config = 'english')
+                mango = Title.objects.annotate(search = vector).filter(search = SearchQuery(query))
                 
-                c = mango.count()
-                return render(request, "issuereturn.html", {'form': form, 'bookdata' : mango, 'count' : c, 'result' : "searchvector"})
+                if mango:
+                    c = mango.count()
+                    return render(request, "issuereturn.html", {'form': form, 'bookdata' : mango, 'count' : c, 'result' : "searchvector", 'issueform' : issueform, 'returnform' : returnform})
+                    
+                else:
+                    apple = Title.objects.annotate(similarity=TrigramSimilarity('author', query) + TrigramSimilarity('title', query),).filter(similarity__gt=0.12) .order_by('-similarity')
+                    c = apple.count()
+                    return render(request, "issuereturn.html", {'form': form, 'bookdata' : apple, 'count' : c, 'result' : "trigram", 'issueform' : issueform, 'returnform' : returnform})
+        
+        if request.GET.get('issue_registration_no'):
+            issueform = IssueForm(request.GET)
+            if issueform.is_valid():
+                student_reg_no = issueform.cleaned_data.get('issue_registration_no')
+                try:
+                    student = StudentProfile.objects.get(registration_no = student_reg_no) 
+                except:
+                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+
+                acc_no = issueform.cleaned_data.get('acc_no')
+
+                try:
+                    book = Books.objects.get(acc_no = acc_no)
+                except:
+                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+
+                doi = date.today()
+                edor = date.today() + timedelta(days=15)
+                issue_mode = "15 Days"
+                log = Log(registration_no=student_reg_no, acc_no=acc_no, edor=edor, issue_mode="15 Days")
+                log.save()
+
+                books = Books.objects.get(acc_no = acc_no)
+                if books:
+                    title = Title.objects.get(uid = books.uid.uid)
+                    title.total_book_count = title.total_book_count - 1
+                    title.save()
+
+                    books.student_id = student_reg_no
+                    books.save()
+                    
+            return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+
+        if request.GET.get('return_acc_no'):
+            returnform = ReturnForm(request.GET)
+            if returnform.is_valid():
+                acc_no = returnform.cleaned_data.get('return_acc_no')
+
+                try:
+                    book = Books.objects.get(acc_no = acc_no)
+                except:
+                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+
+                try:
+                    title = Title.objects.get(uid = book.uid.uid)
+                except:
+                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
                 
-            else:
-                apple = Title.objects.annotate(similarity=TrigramSimilarity('author', query) + TrigramSimilarity('title', query),).filter(similarity__gt=0.12) .order_by('-similarity')
-                c = apple.count()
-                return render(request, "issuereturn.html", {'form': form, 'bookdata' : apple, 'count' : c, 'result' : "trigram"})
+                registration_no = book.student_id
+                book.student_id = ""
+                book.save()
 
+                title.total_book_count = title.total_book_count + 1
+                title.save()
 
-    return render(request, "issuereturn.html", {'form': form})
+                log = Log.objects.filter(acc_no = acc_no, registration_no = registration_no)[0]
+                print(log)
+                log.dor = date.today()
+                log.save()
+
+            return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+
+        else:
+            return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+
+    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
 
 
 

@@ -45,3 +45,19 @@ class TeacherProfileForm(forms.ModelForm):
         fields = '__all__'
 
 
+class IssueForm(forms.Form):
+    issue_registration_no = forms.CharField(max_length=11, label="Enter Student Registration Number", widget=forms.TextInput(attrs={'placeholder': 'Enter Student Registration No.'}))
+    acc_no = forms.IntegerField(label="Enter The Accession Number", widget=forms.NumberInput(attrs={'placeholder': 'Enter Student Accession No.'}))
+
+    class Meta:
+        fields = ["issue_registration_no", "acc_no"] 
+
+
+class ReturnForm(forms.Form):
+    return_acc_no = forms.IntegerField(label="Enter The Accession Number", widget=forms.NumberInput(attrs={'placeholder': 'Enter Student Accession No.'}))
+
+    class Meta:
+        fields = ["return_acc_no"] 
+
+
+

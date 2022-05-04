@@ -11,4 +11,5 @@ admin.site.register(Books)
 admin.site.register(StudentProfile)
 admin.site.register(TeacherProfile)
 admin.site.register(ID)
+admin.site.register(Log)
 
