@@ -57,6 +57,25 @@ class ID(models.Model):
    email = models.EmailField()
    unique_id = models.CharField(max_length = 11, blank = False)
 
+
+APPROVAL_CHOICES = (
+    ("Reading", "Reading"),
+    ("Book Bank", "Book Bank"),
+    ("15 Days", "15 Days"),
+)
+
+
+#This table is used to implement the log of the issue and return of the books in the library
+class Log(models.Model):
+    log_index = models.AutoField(primary_key=True)
+    registration_no = models.ForeignKey(StudentProfile, on_delete=models.CASCADE)
+    acc_no = models.IntegerField(default = 0)
+    doi = models.DateField(auto_now_add = True)
+    dor = models.DateField();
+    issue_mode = models.CharField(choices=APPROVAL_CHOICES)
+    edor = models.DateField()
+
+    
    
  
 
