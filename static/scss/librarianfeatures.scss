@@ -84,7 +84,7 @@ $font-color : #363A52;
             width: 6rem !important;
             box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
         }
-        input{
+        #id_searchinput{
             border-radius: 2rem;
             //box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
             outline: none !important;
@@ -101,6 +101,7 @@ $font-color : #363A52;
             margin-left: -0.89rem;
         }
     }
+    
     h5{
         margin-bottom: 0.2rem;
     }
