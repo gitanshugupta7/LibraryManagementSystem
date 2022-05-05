@@ -17,7 +17,7 @@ class Title(models.Model):
 class Books(models.Model):
     uid = models.ForeignKey(Title, on_delete = models.CASCADE)
     acc_no = models.IntegerField(default = 0, primary_key = True)
-    student_id = models.CharField(default = "", max_length = 20, blank=False)
+    student_id = models.CharField(default = "", max_length = 20, blank=False, null=True)
     last_used = models.DateField(auto_now_add = True, blank = True)
 
     def __str__(self):

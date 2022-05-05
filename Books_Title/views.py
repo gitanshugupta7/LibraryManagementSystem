@@ -217,7 +217,19 @@ def teacher_register(request):
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['student'])
 def student(request):
-    return render(request,'student.html')
+    ll = []
+    if request.user.is_authenticated:
+        student_profile = StudentProfile.objects.get(user = request.user.id)
+        book = Books.objects.filter(student_id = student_profile.registration_no)
+
+        for i in book:
+            log = Log.objects.filter(acc_no = i.acc_no, registration_no = i.student_id, dor = None)
+            ll.append(log)
+        
+        total_count = len(ll)
+        print(ll)
+            
+    return render(request,'student.html', {"list":ll, "total_count":total_count})
 
 
 @login_required(login_url='login')
