@@ -54,7 +54,7 @@ class IssueForm(forms.Form):
 
 
 class ReturnForm(forms.Form):
-    return_acc_no = forms.IntegerField(label="Enter The Accession Number", widget=forms.NumberInput(attrs={'placeholder': 'Enter Student Accession No.'}))
+    return_acc_no = forms.IntegerField(label="Enter The Accession Number", widget=forms.NumberInput(attrs={'placeholder': 'Enter Accession No.'}))
 
     class Meta:
         fields = ["return_acc_no"] 

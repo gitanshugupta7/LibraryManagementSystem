@@ -55,6 +55,9 @@ def issuereturn(request):
             issueform = IssueForm(request.GET)
             if issueform.is_valid():
                 student_reg_no = issueform.cleaned_data.get('issue_registration_no')
+                title = request.GET.get('modal_title')
+                author = request.GET.get('modal_author')
+
                 try:
                     student = StudentProfile.objects.get(registration_no = student_reg_no) 
                 except:
@@ -65,6 +68,9 @@ def issuereturn(request):
                 try:
                     book = Books.objects.get(acc_no = acc_no)
                 except:
+                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+
+                if title != book.uid.title and author != book.uid.author:
                     return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
 
                 doi = date.today()
@@ -88,6 +94,8 @@ def issuereturn(request):
             returnform = ReturnForm(request.GET)
             if returnform.is_valid():
                 acc_no = returnform.cleaned_data.get('return_acc_no')
+                title = request.GET.get('modal_r_title')
+                author = request.GET.get('modal_r_author')
 
                 try:
                     book = Books.objects.get(acc_no = acc_no)
@@ -97,6 +105,9 @@ def issuereturn(request):
                 try:
                     title = Title.objects.get(uid = book.uid.uid)
                 except:
+                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+
+                if title != book.uid.title and author != book.uid.author:
                     return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
                 
                 registration_no = book.student_id
@@ -109,7 +120,7 @@ def issuereturn(request):
                 log = Log.objects.filter(acc_no = acc_no, registration_no = registration_no)[0]
                 print(log)
                 log.dor = date.today()
-                log.save()
+                log.save()  
 
             return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
 
@@ -206,7 +217,19 @@ def teacher_register(request):
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['student'])
 def student(request):
-    return render(request,'student.html')
+    ll = []
+    if request.user.is_authenticated:
+        student_profile = StudentProfile.objects.get(user = request.user.id)
+        book = Books.objects.filter(student_id = student_profile.registration_no)
+
+        for i in book:
+            log = Log.objects.filter(acc_no = i.acc_no, registration_no = i.student_id, dor = None)
+            ll.append(log)
+        
+        total_count = len(ll)
+        print(ll)
+            
+    return render(request,'student.html', {"list":ll, "total_count":total_count})
 
 
 @login_required(login_url='login')
