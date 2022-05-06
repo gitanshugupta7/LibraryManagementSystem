@@ -34,7 +34,7 @@ def issuereturn(request):
         if request.GET.get('searchinput'):
             form = SearchField(request.GET)
             if form.is_valid():
-                # populating()
+                #populating()
                 # print("Populated")
                 query = form.cleaned_data.get('searchinput')
                 start = Title()
