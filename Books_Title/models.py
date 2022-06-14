@@ -30,11 +30,10 @@ class Books(models.Model):
 # This is used to store student data in the system and is connected to django auth via onetoone field
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    dept = models.CharField(max_length = 11, blank = False)
-    phone_number = models.CharField(max_length = 11, blank = False)
+    dept = models.CharField(max_length = 11, blank = False, null=True)
+    phone_number = models.CharField(max_length = 11, blank = False, null=True)
     registration_no = models.CharField(max_length = 11, blank = False, primary_key = True)
-    address = models.CharField(max_length = 50, default = "")
-    unique_id = models.CharField(max_length = 11, blank = False)
+    address = models.CharField(max_length = 50, default = "", null=True)
 
     def __str__(self):
         return str(self.user)

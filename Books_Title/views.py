@@ -12,6 +12,7 @@ from calendar import monthrange
 from django.shortcuts import render, redirect
 from django.forms import inlineformset_factory
 from datetime import timedelta as tdelta
+
 from django.utils import timezone
 from datetime import date, timedelta, datetime
 from django.contrib.auth import authenticate, login, logout
@@ -21,7 +22,7 @@ import datetime
 from .forms import CreateUserForm
 from .decorators import unauthenticated_user, allowed_users,admin_only
 from django.contrib.auth.models import Group
-
+from datetime import datetime
 
 #the main app for the librarian to access the system
 @login_required(login_url='login')
@@ -38,19 +39,23 @@ def issuereturn(request):
                 # print("Populated")
                 query = form.cleaned_data.get('searchinput')
                 start = Title()
+                try:
 
-                vector = SearchVector('title', weight = 'B', config = 'english') + SearchVector('author', weight = 'A', config = 'english')
-                mango = Title.objects.annotate(search = vector).filter(search = SearchQuery(query))
+                        vector = SearchVector('title', weight = 'B', config = 'english') + SearchVector('author', weight = 'A', config = 'english')
+                        mango = Title.objects.annotate(search = vector).filter(search = SearchQuery(query))
                 
-                if mango:
-                    c = mango.count()
-                    return render(request, "issuereturn.html", {'form': form, 'bookdata' : mango, 'count' : c, 'result' : "searchvector", 'issueform' : issueform, 'returnform' : returnform})
-                    
-                else:
-                    apple = Title.objects.annotate(similarity=TrigramSimilarity('author', query) + TrigramSimilarity('title', query),).filter(similarity__gt=0.12) .order_by('-similarity')
-                    c = apple.count()
-                    return render(request, "issuereturn.html", {'form': form, 'bookdata' : apple, 'count' : c, 'result' : "trigram", 'issueform' : issueform, 'returnform' : returnform})
-        
+                        if mango:
+                            c = mango.count()
+                            return render(request, "issuereturn.html", {'form': form, 'bookdata' : mango, 'count' : c, 'result' : "searchvector", 'issueform' : issueform, 'returnform' : returnform})
+
+                        else:
+                            apple = Title.objects.annotate(similarity=TrigramSimilarity('author', query) + TrigramSimilarity('title', query),).filter(similarity__gt=0.12) .order_by('-similarity')
+                            c = apple.count()
+                            return render(request, "issuereturn.html", {'form': form, 'bookdata' : apple, 'count' : c, 'result' : "trigram", 'issueform' : issueform, 'returnform' : returnform})
+                except:
+                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+
+
         if request.GET.get('issue_registration_no'):
             issueform = IssueForm(request.GET)
             if issueform.is_valid():
@@ -168,12 +173,12 @@ def register(request):
 
         form = CreateUserForm(request.POST)
         profile_form = StudentProfileForm(request.POST)
-
+        print(profile_form)
         print("HelloRegister")
-        if form.is_valid() and profile_form.is_valid():
+        if form.is_valid() or profile_form.is_valid() :
 
             user = form.save()
-            profile = profile_form.save(commit=False)
+            profile = profile_form.save()
             profile.user = user
             profile.save()
             group = Group.objects.get(name='student')
@@ -182,8 +187,11 @@ def register(request):
             print(form.cleaned_data.get('username'))
             messages.success(request, 'Account was created for ' + username)
             return redirect('login')
+        else:
+            return redirect('login')
 
-    return render(request, 'register.html',{'form':form,'profile_form':profile_form})
+
+    return render(request, 'register.html', {'form': form, 'profile_form': profile_form})
 
 
 
@@ -217,19 +225,31 @@ def teacher_register(request):
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['student'])
 def student(request):
+    print(request.user.id)
     ll = []
+    fine=[]
     if request.user.is_authenticated:
+        print(request.user.username)
         student_profile = StudentProfile.objects.get(user = request.user.id)
         book = Books.objects.filter(student_id = student_profile.registration_no)
+        curDT = datetime.now()
+        curDTSTR=curDT.strftime("%m/%d/%Y")
+        print(curDTSTR)
 
         for i in book:
             log = Log.objects.filter(acc_no = i.acc_no, registration_no = i.student_id, dor = None)
-            ll.append(log)
-        
+            book = Books.objects.filter(acc_no = log[0].acc_no)
+            print(log[0].edor)
+            date_time = log[0].edor.strftime("%m/%d/%Y")
+            #print(date_time)
+            print((datetime.strptime(curDTSTR, "%m/%d/%Y")-datetime.strptime(date_time, "%m/%d/%Y")).days)
+            ll.append(book[0].uid.title)
+            fine.append((datetime.strptime(curDTSTR, "%m/%d/%Y")-datetime.strptime(date_time, "%m/%d/%Y")).days*5)
+
         total_count = len(ll)
         print(ll)
-            
-    return render(request,'student.html', {"list":ll, "total_count":total_count})
+
+    return render(request,'student.html', {"list":ll,"fine":fine, "total_count":total_count,"name":request.user.first_name+" " +request.user.last_name +"  "+ "  "+student_profile.dept})
 
 
 @login_required(login_url='login')

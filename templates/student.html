@@ -16,25 +16,27 @@
 
 
 <ul class="list-unstyled">
+     <li class="card col-md-9 mb-3 pl-4 p-3" style="background-color: #88a3c1;">
+          <h5>{{name}}</h5>
+
+        </li>
+
     {% for i in list %}
 
-       {% if i.total_count %}
-         
-        <li class="card col-md-9 mb-3 pl-4 p-3">
-          <h5>{{i.title}}</h5>
-          <p class="display-6">{{i.author}}</p>
+       {% if total_count %}
 
-         <div class="mt-2">
-            <button id="" value="{{i.title}}#{{i.author}}" style="background-color: #E9ECF5;" type="submit" class="btn btn-primary float-right ml-2 return_button" data-toggle="modal" data-target="#exampleModalCenter1">Return</button>
-            <button id="" value="{{i.title}}#{{i.author}}"  style="background-color: #00CA80;" type="submit" class="btn btn-primary float-right mr-1 issue_button" data-toggle="modal" data-target="#exampleModalCenter2">Issue</button>
-         </div>
+        <li class="card col-md-9 mb-3 pl-4 p-3">
+          <h5>{{i}}</h5>
+
+
+
         </li>
         
       {% else %}
 
         <li class="card col-md-9 mb-3 pl-4 p-3" style="background-color: #DBB7B7;">
-          <h5>{{ i.title }}</h5>
-          <p class="display-6">{{i.author}}</p>
+          <h5>{{ i }}</h5>
+          <p class="display-6">{{i}}</p>
 
           <div class="mt-2">
             <button id="return_button" value="{{i.title}}#{{i.author}}" style="background-color: #E9ECF5;" type="submit" class="btn btn-primary float-right ml-2">Return</button>
