@@ -11,7 +11,7 @@ class Title(models.Model):
     total_book_count = models.IntegerField(default = 0)
 
     def __str__(self):
-        return self.title
+        return self.title + " " + "(" + self.author + ")"
 
 # This table stores all the copies available in the library and is connected to the titles table via foreign key
 class Books(models.Model):

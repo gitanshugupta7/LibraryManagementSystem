@@ -78,11 +78,9 @@ def issuereturn(request):
                     print("no accession")
                     return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
 
-                #if(book.student_id !=None):
-                    #print("kaa hua pehle to diyen hain")
-                   # return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
-
-
+                if(book.student_id != None):
+                    print("kaa hua pehle to diyen hain")
+                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
 
                 if title != book.uid.title and author != book.uid.author:
                     print("bhul bhaal book aithor")

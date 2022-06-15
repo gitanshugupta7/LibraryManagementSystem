@@ -48,7 +48,7 @@ class TeacherProfileForm(forms.ModelForm):
 
 class IssueForm(forms.Form):
     issue_registration_no = forms.CharField(max_length=11, label="Enter Student Registration Number", widget=forms.TextInput(attrs={'placeholder': 'Enter Student Registration No.'}))
-    acc_no = forms.IntegerField(label="Enter The Accession Number", widget=forms.NumberInput(attrs={'placeholder': 'Enter Student Accession No.'}))
+    acc_no = forms.IntegerField(label="Enter The Accession Number", widget=forms.NumberInput(attrs={'placeholder': 'Enter Accession No.'}))
 
     class Meta:
         fields = ["issue_registration_no", "acc_no"] 
