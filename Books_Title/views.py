@@ -66,16 +66,26 @@ def issuereturn(request):
                 try:
                     student = StudentProfile.objects.get(registration_no = student_reg_no) 
                 except:
+                    print("no registration")
                     return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
 
                 acc_no = issueform.cleaned_data.get('acc_no')
 
                 try:
                     book = Books.objects.get(acc_no = acc_no)
+                    print(book.uid.author)
                 except:
+                    print("no accession")
                     return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
 
+                #if(book.student_id !=None):
+                    #print("kaa hua pehle to diyen hain")
+                   # return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+
+
+
                 if title != book.uid.title and author != book.uid.author:
+                    print("bhul bhaal book aithor")
                     return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
 
                 doi = date.today()
@@ -164,7 +174,6 @@ def logoutUser(request):
 
 
 #registration function for students only
-@unauthenticated_user
 def register(request):
     form = CreateUserForm()
     profile_form = StudentProfileForm()
@@ -175,10 +184,12 @@ def register(request):
         profile_form = StudentProfileForm(request.POST)
         print(profile_form)
         print("HelloRegister")
+        print(profile_form.is_valid())
         if form.is_valid() or profile_form.is_valid() :
 
             user = form.save()
-            profile = profile_form.save()
+            print(user)
+            profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
             group = Group.objects.get(name='student')
@@ -188,7 +199,7 @@ def register(request):
             messages.success(request, 'Account was created for ' + username)
             return redirect('login')
         else:
-            return redirect('login')
+            messages.error(request,"Error")
 
 
     return render(request, 'register.html', {'form': form, 'profile_form': profile_form})
