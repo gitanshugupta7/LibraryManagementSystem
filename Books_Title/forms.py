@@ -36,7 +36,6 @@ class StudentProfileForm(forms.ModelForm):
     
     class Meta:
         model = StudentProfile
-
         fields = ['dept','phone_number','registration_no','address']
 
 
