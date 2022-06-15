@@ -164,7 +164,6 @@ def logoutUser(request):
 
 
 #registration function for students only
-@unauthenticated_user
 def register(request):
     form = CreateUserForm()
     profile_form = StudentProfileForm()
@@ -175,10 +174,12 @@ def register(request):
         profile_form = StudentProfileForm(request.POST)
         print(profile_form)
         print("HelloRegister")
+        print(profile_form.is_valid())
         if form.is_valid() or profile_form.is_valid() :
 
             user = form.save()
-            profile = profile_form.save()
+            print(user)
+            profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
             group = Group.objects.get(name='student')
@@ -188,7 +189,7 @@ def register(request):
             messages.success(request, 'Account was created for ' + username)
             return redirect('login')
         else:
-            return redirect('login')
+            messages.error(request,"Error")
 
 
     return render(request, 'register.html', {'form': form, 'profile_form': profile_form})

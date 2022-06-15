@@ -35,7 +35,8 @@ class StudentProfileForm(forms.ModelForm):
     
     class Meta:
         model = StudentProfile
-        fields = '__all__'
+
+        fields = ['dept','phone_number','registration_no','address']
 
 
 class TeacherProfileForm(forms.ModelForm):
