@@ -78,7 +78,7 @@ def issuereturn(request):
                     print("no accession")
                     return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
 
-                if(book.student_id != None):
+                if book.student_id != "":
                     print("kaa hua pehle to diyen hain")
                     return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
 
@@ -91,7 +91,7 @@ def issuereturn(request):
                 issue_mode = "15 Days"
                 log = Log(registration_no=student_reg_no, acc_no=acc_no, edor=edor, issue_mode="15 Days")
                 log.save()
-
+                print("All successfull")
                 books = Books.objects.get(acc_no = acc_no)
                 if books:
                     title = Title.objects.get(uid = books.uid.uid)
@@ -268,3 +268,10 @@ def teacher(request):
 
 
 
+@login_required(login_url='login')
+@admin_only
+def addbook(request):
+    title_form = AddTitleForm()
+    book_form = AddBookForm()
+
+    return render(request, "addbook.html", {'title_form' : title_form, 'book_form' : book_form})

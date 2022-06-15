@@ -1,3 +1,4 @@
+from dataclasses import field
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -61,4 +62,13 @@ class ReturnForm(forms.Form):
         fields = ["return_acc_no"] 
 
 
+class AddTitleForm(forms.Form):
 
+    class Meta:
+        fields = ['title', 'author', 'total_book_count']
+
+
+class AddBookForm(forms.Form):
+
+    class Meta:
+        fields = ['acc_no', 'student_id', 'last_used']
