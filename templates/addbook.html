@@ -1,0 +1,30 @@
+{% extends 'librarianfeatures.html' %}
+
+{% load static %}
+
+{% block all_features %}
+
+<div class="mt-4 pl-5 search-results col-md-10 col-lg-9 offset-md-2 offset-lg-1">
+
+      <div class="col-md-12 mt-1 mb-3">
+        
+        <form method="GET" class="row">
+        {% csrf_token %}
+        <div class="col-md-12">
+            <h6>Student Registration No.</h6>
+        </div>
+        <div class="col-md-12">
+            {{title_form.title}}
+        </div>
+        </form> 
+    </div>
+</div>
+
+
+
+
+
+
+
+
+{% endblock %}

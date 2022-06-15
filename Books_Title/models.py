@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 # This table only saved the distinct titles in the library
 class Title(models.Model):
-    uid = models.IntegerField(default = 0, primary_key = True, blank=False)
+    uid = models.IntegerField(default = 0, primary_key = True)
     title = models.CharField(default = "", max_length = 500, blank=False)
     author = models.CharField(default = "", max_length = 100, blank=False)
     total_book_count = models.IntegerField(default = 0)
@@ -17,7 +17,7 @@ class Title(models.Model):
 class Books(models.Model):
     uid = models.ForeignKey(Title, on_delete = models.CASCADE)
     acc_no = models.IntegerField(default = 0, primary_key = True)
-    student_id = models.CharField(default = "", max_length = 20, blank=False, null=True)
+    student_id = models.CharField(default = "", max_length = 20, blank=True)
     last_used = models.DateField(auto_now_add = True, blank = True)
 
     def __str__(self):
@@ -30,9 +30,9 @@ class Books(models.Model):
 # This is used to store student data in the system and is connected to django auth via onetoone field
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    dept = models.CharField(max_length = 11, blank = False, null=True)
-    phone_number = models.CharField(max_length = 11, blank = False, null=True)
-    registration_no = models.CharField(max_length = 11, blank = False, primary_key = True)
+    dept = models.CharField(max_length = 11, blank = True, null=True)
+    phone_number = models.CharField(max_length = 11, blank = True, null=True)
+    registration_no = models.CharField(max_length = 11, primary_key = True)
     address = models.CharField(max_length = 50, default = "", null=True)
 
     def __str__(self):
