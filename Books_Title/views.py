@@ -66,16 +66,26 @@ def issuereturn(request):
                 try:
                     student = StudentProfile.objects.get(registration_no = student_reg_no) 
                 except:
+                    print("no registration")
                     return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
 
                 acc_no = issueform.cleaned_data.get('acc_no')
 
                 try:
                     book = Books.objects.get(acc_no = acc_no)
+                    print(book.uid.author)
                 except:
+                    print("no accession")
                     return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
 
+                #if(book.student_id !=None):
+                    #print("kaa hua pehle to diyen hain")
+                   # return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+
+
+
                 if title != book.uid.title and author != book.uid.author:
+                    print("bhul bhaal book aithor")
                     return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
 
                 doi = date.today()
