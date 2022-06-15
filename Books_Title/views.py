@@ -248,6 +248,8 @@ def student(request):
         print(curDTSTR)
 
         for i in book:
+            print(i.acc_no)
+            print(i.student_id)
             log = Log.objects.filter(acc_no = i.acc_no, registration_no = i.student_id, dor = None)
             book = Books.objects.filter(acc_no = log[0].acc_no)
             print(log[0].edor)
@@ -274,6 +276,24 @@ def teacher(request):
 @admin_only
 def addbook(request):
     title_form = AddTitleForm()
-    book_form = AddBookForm()
 
-    return render(request, "addbook.html", {'title_form' : title_form, 'book_form' : book_form})
+    # uid = Title.objects.latest('uid')
+    # print(uid.uid)
+    # acc_no = Books.objects.latest('acc_no')
+    # print(acc_no.acc_no)
+
+    if request.method == 'POST':
+        if title_form.is_valid():
+            title = title_form.cleaned_data['title']
+            author = title_form.cleaned_data['author']
+            total_book_count = title_form.cleaned_data['total_book_count']
+            title_object = Title.objects.latest('uid')
+            uid = title_object.uid + 1
+            print(uid)
+        else:
+            messages.error(request,"Error")
+            print(title_form.errors)
+
+    
+
+    return render(request, "addbook.html", {'title_form' : title_form})

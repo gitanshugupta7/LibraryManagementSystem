@@ -62,14 +62,10 @@ class ReturnForm(forms.Form):
 
 
 class AddTitleForm(forms.Form):
-    title = forms.CharField(max_length=11, label="Enter Student Registration Number", widget=forms.TextInput(attrs={'placeholder': 'Enter Student Registration No.'}))
-    author = forms.CharField(max_length=11, label="Enter Student Registration Number", widget=forms.TextInput(attrs={'placeholder': 'Enter Student Registration No.'}))
-    total_book_count = forms.IntegerField()
+    title = forms.CharField(max_length=100, label="Enter Title", widget=forms.TextInput(attrs={'placeholder': 'Enter Title.'}))
+    author = forms.CharField(max_length=11, label="Enter Author", widget=forms.TextInput(attrs={'placeholder': 'Enter Author.'}))
+    total_book_count = forms.IntegerField(label="Enter Book Count", widget=forms.NumberInput(attrs={'placeholder': 'Enter Total Book Count'}))
+    
     class Meta:
         fields = ['title', 'author', 'total_book_count']
 
-
-class AddBookForm(forms.Form):
-
-    class Meta:
-        fields = ['acc_no', 'student_id', 'last_used']

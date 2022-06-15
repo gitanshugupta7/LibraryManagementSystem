@@ -8,28 +8,27 @@
 
       <div class="col-md-12 mt-1 mb-3">
         
-        <form method="GET" class="row">
-        {% csrf_token %}
-        <div class="col-md-12">
-            <h6>Student Registration No.</h6>
-        </div>
-        <div class="col-md-12">
-            {{title_form.title}}
-        </div>
-            <div class="col-md-12">
-            {{title_form.author}}
-        </div>
-            <div class="col-md-12">
-            {{title_form.total_book_count}}
-        </div>
+        <form method="POST" class="row">
+            {% csrf_token %}
+            <div class="m-4 col-md-8">
+                {{title_form.title}}
+            </div>
+            <div class="m-4 col-md-8">
+                {{title_form.author}}
+            </div>
+                <div class="m-4 col-md-8">
+                {{title_form.total_book_count}}
+            </div>
+            <div class="m-4 col-md-8">
+                <button class="btn" style="background-color: #00CA80;" type="submit" name="Search">Issue</button>
+            </div>
         </form> 
+
+        <div class="m-4 col-md-8">
+            {{title_form.errors}}
+        </div>
     </div>
 </div>
-
-
-
-
-
 
 
 
