@@ -64,7 +64,7 @@ class ReturnForm(forms.Form):
 class AddTitleForm(forms.Form):
     title = forms.CharField(max_length=100, label="Enter Title", widget=forms.TextInput(attrs={'placeholder': 'Enter Title.'}))
     author = forms.CharField(max_length=11, label="Enter Author", widget=forms.TextInput(attrs={'placeholder': 'Enter Author.'}))
-    total_book_count = forms.IntegerField(label="Enter Book Count", widget=forms.NumberInput(attrs={'placeholder': 'Enter Total Book Count'}))
+    total_book_count = forms.IntegerField(label="Enter Book Count", widget=forms.NumberInput(attrs={'placeholder': 'Enter Number of Copies'}))
     
     class Meta:
         fields = ['title', 'author', 'total_book_count']

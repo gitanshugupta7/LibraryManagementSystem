@@ -283,13 +283,27 @@ def addbook(request):
     # print(acc_no.acc_no)
 
     if request.method == 'POST':
+        title_form = AddTitleForm(request.POST)
         if title_form.is_valid():
+            #Getting form data and storing it into the title table
             title = title_form.cleaned_data['title']
             author = title_form.cleaned_data['author']
             total_book_count = title_form.cleaned_data['total_book_count']
             title_object = Title.objects.latest('uid')
             uid = title_object.uid + 1
-            print(uid)
+            title_model = Title(uid, title, author, total_book_count)
+            title_model.save()
+
+            #Adding books in books table in loop
+            books_object = Books.objects.latest('acc_no')
+            acc_no = books_object.acc_no + 1;
+            e_acc_no = acc_no + total_book_count
+          
+
+            for i in range(acc_no, e_acc_no):
+                book_model = Books(title_model.uid, i, "", date.today())
+                book_model.save()
+
         else:
             messages.error(request,"Error")
             print(title_form.errors)
