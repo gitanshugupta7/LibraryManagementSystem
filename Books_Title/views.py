@@ -31,6 +31,7 @@ def issuereturn(request):
     form = SearchField()
     issueform = IssueForm()
     returnform = ReturnForm()
+    addcopies = AddBookCopies()
     if request.method == "GET":
         if request.GET.get('searchinput'):
             form = SearchField(request.GET)
@@ -46,15 +47,14 @@ def issuereturn(request):
                 
                         if mango:
                             c = mango.count()
-                            return render(request, "issuereturn.html", {'form': form, 'bookdata' : mango, 'count' : c, 'result' : "searchvector", 'issueform' : issueform, 'returnform' : returnform})
+                            return render(request, "issuereturn.html", {'form': form, 'bookdata' : mango, 'count' : c, 'result' : "searchvector", 'issueform' : issueform, 'returnform' : returnform, 'addcopies' : addcopies})
 
                         else:
                             apple = Title.objects.annotate(similarity=TrigramSimilarity('author', query) + TrigramSimilarity('title', query),).filter(similarity__gt=0.12) .order_by('-similarity')
                             c = apple.count()
-                            return render(request, "issuereturn.html", {'form': form, 'bookdata' : apple, 'count' : c, 'result' : "trigram", 'issueform' : issueform, 'returnform' : returnform})
+                            return render(request, "issuereturn.html", {'form': form, 'bookdata' : apple, 'count' : c, 'result' : "trigram", 'issueform' : issueform, 'returnform' : returnform, 'addcopies' : addcopies})
                 except:
-                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
-
+                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform, 'addcopies' : addcopies})
 
         if request.GET.get('issue_registration_no'):
             issueform = IssueForm(request.GET)
@@ -67,7 +67,7 @@ def issuereturn(request):
                     student = StudentProfile.objects.get(registration_no = student_reg_no) 
                 except:
                     print("no registration")
-                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform, 'addcopies' : addcopies})
 
                 acc_no = issueform.cleaned_data.get('acc_no')
 
@@ -76,17 +76,17 @@ def issuereturn(request):
                     print(book.uid.author)
                 except:
                     print("no accession")
-                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform, 'addcopies' : addcopies})
 
 
                 if book.student_id != "":
                     print("kaa hua pehle to diyen hain")
-                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform, 'addcopies' : addcopies})
 
 
                 if title != book.uid.title or author != book.uid.author:
                     print("bhul bhaal book aithor")
-                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform, 'addcopies' : addcopies})
 
                 doi = date.today()
                 edor = date.today() + timedelta(days=15)
@@ -103,7 +103,7 @@ def issuereturn(request):
                     books.student_id = student_reg_no
                     books.save()
                     
-            return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+            return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform, 'addcopies' : addcopies})
 
         if request.GET.get('return_acc_no'):
             returnform = ReturnForm(request.GET)
@@ -115,16 +115,16 @@ def issuereturn(request):
                 try:
                     book = Books.objects.get(acc_no = acc_no)
                 except:
-                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform, 'addcopies' : addcopies})
 
                 try:
                     title = Title.objects.get(uid = book.uid.uid)
                 except:
-                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform, 'addcopies' : addcopies})
 
                 if title != book.uid.title or author != book.uid.author:
-                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
-                
+                    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform, 'addcopies' : addcopies})
+
                 registration_no = book.student_id
                 book.student_id = ""
                 book.save()
@@ -137,12 +137,32 @@ def issuereturn(request):
                 log.dor = date.today()
                 log.save()  
 
-            return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+            return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform, 'addcopies' : addcopies})
+
+        if request.GET.get('no_of_copies'):
+            addcopies = AddBookCopies(request.GET)
+            if addcopies.is_valid():
+                no = addcopies.cleaned_data.get('no_of_copies')
+                uid = request.GET.get('modal_a_uid')
+                #print("Printing No Of Copies : " + str(no) + str(uid))
+                title = Title.objects.get(uid=uid)
+                title.total_book_count = title.total_book_count + no;
+                title.save();
+                #print(title.title);
+                books_object = Books.objects.latest('acc_no')
+                acc_no = books_object.acc_no + 1;
+                e_acc_no = acc_no + no
+
+                for i in range(acc_no, e_acc_no):
+                    book_model = Books(title.uid, i, "", date.today())
+                    book_model.save()
+
+                
 
         else:
-            return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+            return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform, 'addcopies' : addcopies})
 
-    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
+    return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform, 'addcopies' : addcopies})
 
 
 
@@ -327,3 +347,5 @@ def addbook(request):
     
 
     return render(request, "addbook.html", {'title_form' : title_form})
+
+

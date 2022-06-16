@@ -6,6 +6,7 @@
 
 <div class="mt-4 pl-5 search-results col-md-10 col-lg-9 offset-md-2 offset-lg-1">
 
+    <h2 class="display-4 mb-4">Search Books</h2>
     <form method="GET" class="row">
         {% csrf_token %} 
         <div class="col-md-8">
@@ -29,11 +30,12 @@
           <p class="display-6">{{i.author}}</p>
 
          <div class="mt-2">
-            <h6>No.Of Copies</h6>
-            <h6>{{i.total_book_count}}</h6>
+            <h6>No.Of Copies : {{i.total_book_count}}</h6>
+            <h6></h6>
+            <br>
             <button id="" value="{{i.title}}#{{i.author}}" style="background-color: #E9ECF5;" type="submit" class="btn btn-primary float-right ml-2 return_button" data-toggle="modal" data-target="#exampleModalCenter1">Return</button>
             <button id="" value="{{i.title}}#{{i.author}}"  style="background-color: #00CA80;" type="submit" class="btn btn-primary float-right mr-1 issue_button" data-toggle="modal" data-target="#exampleModalCenter2">Issue</button>
-            <button id="" value="{{i.title}}#{{i.author}}"  style="background-color: #000080; color: white;" type="submit" class="btn btn-primary float-left add_button" data-toggle="modal" data-target="#exampleModalCenter3">Add</button>
+            <button id="" value="{{i.title}}#{{i.author}}#{{i.uid}}"  style="background-color: #000080; color: white;" type="submit" class="btn btn-primary float-left add_button" data-toggle="modal" data-target="#exampleModalCenter3">Add</button>
             <div class="col-12">{{i.errors}}</div>
          </div>
         </li>
@@ -180,7 +182,13 @@
                 <div class="col-md-12 mb-5 mt-1">
                   <input id="modal_a_author" name="modal_a_author" type="text" readonly="true" value=""/>
                 </div>
+                <div class="col-md-12 mb-5 mt-1" style="display: none;">
+                  <input id="modal_a_uid" name="modal_a_uid" type="text" readonly="true" value=""/>
+                </div>
                 
+                <div class="col-md-12 mb-5 mt-1">
+                  {{addcopies.no_of_copies}}
+                </div>
                 <div class="col-md-12 mb-2" id="">
                 <button class="btn" style="background-color: #00CA80;" type="submit" name="Search">Add</button>
                 </div>
@@ -211,8 +219,10 @@
       var arr = value.split("#");
       title_name = arr[0];
       author_name = arr[1];
+      uid = arr[2];
       $("#modal_a_title").val(title_name);
       $("#modal_a_author").val(author_name);
+      $("#modal_a_uid").val(uid);
   });
 
   $(".return_button").click(function () {

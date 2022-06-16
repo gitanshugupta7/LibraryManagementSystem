@@ -69,3 +69,8 @@ class AddTitleForm(forms.Form):
     class Meta:
         fields = ['title', 'author', 'total_book_count']
 
+class AddBookCopies(forms.Form):
+    no_of_copies = forms.IntegerField(label="Enter No Of Copies", widget=forms.NumberInput(attrs={'placeholder': 'Enter Number of Copies'}))
+    
+    class Meta:
+        fields = ['no_of_copies']

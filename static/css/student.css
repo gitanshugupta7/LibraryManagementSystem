@@ -24,3 +24,9 @@ h1, h4{
     margin-bottom: 0 !important;
     color: white;
 }
+
+.logout_button{
+    height: 2rem;
+    width: 2rem;
+    cursor: pointer;
+}
