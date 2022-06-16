@@ -8,11 +8,55 @@
 
   {% endblock %}
 
-  <link rel="stylesheet" href="{% static 'css/librarianfeatures.css' %}" type="text/css">
+  <link rel="stylesheet" href="{% static 'css/student.css' %}" type="text/css">
 
 {% endblock %}
 
 {% block restcontainer %}
+
+<div class="row">
+  <div class="col-md-6">
+    <h1 class="mt-4 ml-4 mb-3">Student Dashboard</h1>
+  </div>
+  <div class="col-md-12 mt-1 ml-4 row">
+    <div class="col-md-3 mr-4 p-5 s_card">
+      Hello
+    </div>
+    <div class="col-md-3 ml-2 mr-2 p-5 s_card">
+      Hello
+    </div>
+    <div class="col-md-3 p-5 ml-4 s_card">
+      Hello
+    </div>
+  </div>
+  <div class="mt-5 ml-4 col-md-12 row">
+    <h4 class="">Books Issued</h4>
+    <ul class="list-unstyled">
+      {% for i in bookdata %}
+  
+         {% if i.total_book_count %}
+           
+          <li class="card col-md-9 mb-3 pl-4 p-3">
+            <h5>{{i.title}}</h5>
+            <p class="display-6">{{i.author}}</p>
+          </li>
+          
+        {% else %}
+  
+          <li class="card col-md-9 mb-3 pl-4 p-3" style="background-color: #DBB7B7;">
+            <h5>{{i.title}}</h5>
+            <p class="display-6">{{i.author}}</p>
+          </li>
+        
+        {% endif %}
+        
+      {% endfor %}
+      </ul>
+  
+  </div>
+</div>
+
+
 
 
 <ul class="list-unstyled">

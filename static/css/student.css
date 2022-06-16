@@ -1,0 +1,14 @@
+body{
+    background-color: #0D276B;
+}
+
+h1, h4{
+    color: white;
+    opacity: 0.97;
+}
+
+.s_card{
+    background-color: white;
+    opacity: 0.97;
+    border-radius: 10px;
+}
