@@ -240,6 +240,8 @@ def student(request):
     ll = []
     fine=[]
     collect_list=[]
+    b_author = []
+    edor=[]
     if request.user.is_authenticated:
         print(request.user.username)
         student_profile = StudentProfile.objects.get(user = request.user.id)
@@ -258,22 +260,25 @@ def student(request):
             #print(date_time)
             print((datetime.strptime(curDTSTR, "%m/%d/%Y")-datetime.strptime(date_time, "%m/%d/%Y")).days)
             ll.append(book[0].uid.title)
+            b_author.append(book[0].uid.author)
+            edor.append(log[0].edor)
             total_fine=(datetime.strptime(curDTSTR, "%m/%d/%Y")-datetime.strptime(date_time, "%m/%d/%Y")).days*5
             if total_fine < 0:
                 total_fine=0
             fine.append(total_fine)
-        collect_list=zip(ll,fine)
+        collect_list=zip(ll,b_author,edor,fine)
         #student details
         sname=request.user.first_name+" " +request.user.last_name
         sdept=student_profile.dept
         sphone_number=student_profile.phone_number
         sregistration_no=student_profile.registration_no
         saddress=student_profile.address
+        smail=request.user.email;
         total_count = len(ll)
         print("list count")
         print(ll)
 
-    return render(request,'student.html', {"list":ll,"fine":fine,"collect_list":collect_list, "total_count":total_count,"name":sname,"dept":sdept,"sphonenumber":sphone_number,"registration_no":sregistration_no,"address":saddress})
+    return render(request,'student.html', {"list":ll,"fine":fine,"collect_list":collect_list, "total_count":total_count,"name":sname,"dept":sdept,"sphonenumber":sphone_number,"registration_no":sregistration_no,"address":saddress, "smail" : smail})
 
 
 @login_required(login_url='login')

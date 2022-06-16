@@ -33,6 +33,7 @@
             <h6>{{i.total_book_count}}</h6>
             <button id="" value="{{i.title}}#{{i.author}}" style="background-color: #E9ECF5;" type="submit" class="btn btn-primary float-right ml-2 return_button" data-toggle="modal" data-target="#exampleModalCenter1">Return</button>
             <button id="" value="{{i.title}}#{{i.author}}"  style="background-color: #00CA80;" type="submit" class="btn btn-primary float-right mr-1 issue_button" data-toggle="modal" data-target="#exampleModalCenter2">Issue</button>
+            <button id="" value="{{i.title}}#{{i.author}}"  style="background-color: #000080; color: white;" type="submit" class="btn btn-primary float-left add_button" data-toggle="modal" data-target="#exampleModalCenter3">Add</button>
             <div class="col-12">{{i.errors}}</div>
          </div>
         </li>
@@ -152,17 +153,66 @@
       </div>
     </div>
 
+    <!--This is the modal class to add more copies-->
+    <div class="modal fade" id="exampleModalCenter3" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Add Copies</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <div class="container-fluid">
+              <form method="GET" class="row">
+                {% csrf_token %} 
+                <div class="col-md-12">
+                  <h6>Title</h6>
+                </div>
+                <div class="col-md-12 mb-4 mt-1">
+                  <input id="modal_a_title" name="modal_a_title" type="text" readonly="true" value=""/>
+                </div>
+                <div class="col-md-12">
+                  <h6>Author</h6>
+                </div>
+                <div class="col-md-12 mb-5 mt-1">
+                  <input id="modal_a_author" name="modal_a_author" type="text" readonly="true" value=""/>
+                </div>
+                
+                <div class="col-md-12 mb-2" id="">
+                <button class="btn" style="background-color: #00CA80;" type="submit" name="Search">Add</button>
+                </div>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
 </div>
 
 <script type="text/javascript">
   $(".issue_button").click(function () {
       var value = $(this).attr("value");
-      console.log(value);0
+      console.log(value);
       var arr = value.split("#");
       title_name = arr[0];
       author_name = arr[1];
       $("#modal_title").val(title_name);
       $("#modal_author").val(author_name);
+  });
+
+  $(".add_button").click(function () {
+      var value = $(this).attr("value");
+      console.log(value);
+      var arr = value.split("#");
+      title_name = arr[0];
+      author_name = arr[1];
+      $("#modal_a_title").val(title_name);
+      $("#modal_a_author").val(author_name);
   });
 
   $(".return_button").click(function () {

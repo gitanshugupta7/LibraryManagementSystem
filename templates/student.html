@@ -4,99 +4,67 @@
 
 {% block extracss %}
 
-  {% block all_feature_css %}
-
-  {% endblock %}
-
   <link rel="stylesheet" href="{% static 'css/student.css' %}" type="text/css">
 
 {% endblock %}
 
 {% block restcontainer %}
 
-<div class="row">
+<div class="row m-0 p-0">
   <div class="col-md-6">
-    <h1 class="mt-4 ml-4 mb-3">Student Dashboard</h1>
+    <h1 class="mt-4 mb-3">Student Dashboard</h1>
   </div>
-  <div class="col-md-12 mt-1 ml-4 row">
+  <div class="col-md-12 mt-1 ml-1 row p-0">
     <div class="col-md-3 mr-4 p-5 s_card">
-      Hello
+      <h5>Name : {{name}}</h5>
+      <h5>Department : {{dept}}</h5>
     </div>
-    <div class="col-md-3 ml-2 mr-2 p-5 s_card">
-      Hello
+    <div class="col-md-3 ml-2 mr-2 p-4 s_card">
+      <h5>Phone Number</h5>
+      <h6>{{sphonenumber}}</h6>
+      <h5>Email</h5>  
+      <h6>{{smail}}</h6>
     </div>
-    <div class="col-md-3 p-5 ml-4 s_card">
-      Hello
+    <div class="col-md-3 p-4 ml-4 s_card">
+      <h2 class="text-center">Total Book Issued</h2>
+      <h2 class="text-right mr-2">{{total_count}}</h2>
     </div>
   </div>
-  <div class="mt-5 ml-4 col-md-12 row">
-    <h4 class="">Books Issued</h4>
+  <div class="mt-5 col-md-12 row">
+    <div class="col-md-12">
+        <h4 class="">Books Issued</h4>
+    </div>
+    <div class="col-md-9">
     <ul class="list-unstyled">
-      {% for i in bookdata %}
+      {% for i,j,l,k in collect_list %}
   
-         {% if i.total_book_count %}
+         {% if not k %}
            
-          <li class="card col-md-9 mb-3 pl-4 p-3">
-            <h5>{{i.title}}</h5>
-            <p class="display-6">{{i.author}}</p>
+          <li class="card col-md-9 mb-3 p-4 mt-3">
+            <h5>{{i}}</h5>
+            <p class="display-6">{{j}}</p>
+            <h6>Date Of Return : {{l}}</h6>
           </li>
           
         {% else %}
   
           <li class="card col-md-9 mb-3 pl-4 p-3" style="background-color: #DBB7B7;">
-            <h5>{{i.title}}</h5>
-            <p class="display-6">{{i.author}}</p>
+            <h5>{{i}}</h5>
+            <p class="display-6">{{j}}</p>
+            <h6>Date Of Return : {{l}}</h6>
+            <div class="fine p-2 col-md-2 text-center">
+              <h6 class="fine-h6">Fine : {{k}}</h6>
+            </div>
           </li>
         
         {% endif %}
         
       {% endfor %}
       </ul>
+    </div>
   
   </div>
 </div>
-
-
-
-
-<ul class="list-unstyled">
-      <li class="card col-md-9 mb-3 pl-4 p-3" style="background-color: #88a3c1;">
-          <h5>{{name}}</h5>
-          <h5>{{dept}}</h5>
-          <h5>{{sphonenumber}}</h5>
-          <h5>{{registration_no}}</h5>
-          <h5>{{sdress}}</h5>
-
-      </li>
-
-    {% for i,j in collect_list %}
-
-       {% if total_count %}
-
-        <li class="card col-md-9 mb-3 pl-4 p-3">
-          <h5>{{i}}</h5>
-            <h5>{{j}}</h5>
-
-
-
-        </li>
-        
-      {% else %}
-
-        <li class="card col-md-9 mb-3 pl-4 p-3" style="background-color: #DBB7B7;">
-          <h5>{{ i }}</h5>
-          <p class="display-6">{{i}}</p>
-
-          <div class="mt-2">
-            <button id="return_button" value="{{i.title}}#{{i.author}}" style="background-color: #E9ECF5;" type="submit" class="btn btn-primary float-right ml-2">Return</button>
-          </div>
-        </li>
-      
-      {% endif %}
-      
-    {% endfor %}
-    </ul>
-
 
 
 {% endblock %}
