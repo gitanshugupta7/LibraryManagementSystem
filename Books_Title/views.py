@@ -108,23 +108,28 @@ def issuereturn(request):
         if request.GET.get('return_acc_no'):
             returnform = ReturnForm(request.GET)
             if returnform.is_valid():
+                print("Success1")
                 acc_no = returnform.cleaned_data.get('return_acc_no')
                 title = request.GET.get('modal_r_title')
                 author = request.GET.get('modal_r_author')
+                
 
                 try:
                     book = Books.objects.get(acc_no = acc_no)
                 except:
                     return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform, 'addcopies' : addcopies})
 
+                
                 try:
                     title = Title.objects.get(uid = book.uid.uid)
                 except:
                     return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform, 'addcopies' : addcopies})
 
-                if title != book.uid.title or author != book.uid.author:
+                if title.title != book.uid.title or author != book.uid.author:
+                    print("Stuck Here")
                     return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform, 'addcopies' : addcopies})
 
+                
                 registration_no = book.student_id
                 book.student_id = ""
                 book.save()
