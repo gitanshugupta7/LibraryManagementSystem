@@ -122,7 +122,7 @@ def issuereturn(request):
                 except:
                     return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
 
-                if title != book.uid.title and author != book.uid.author:
+                if title != book.uid.title or author != book.uid.author:
                     return render(request, "issuereturn.html", {'form': form, 'issueform' : issueform, 'returnform' : returnform})
                 
                 registration_no = book.student_id
@@ -239,6 +239,7 @@ def student(request):
     print(request.user.id)
     ll = []
     fine=[]
+    collect_list=[]
     if request.user.is_authenticated:
         print(request.user.username)
         student_profile = StudentProfile.objects.get(user = request.user.id)
@@ -257,12 +258,22 @@ def student(request):
             #print(date_time)
             print((datetime.strptime(curDTSTR, "%m/%d/%Y")-datetime.strptime(date_time, "%m/%d/%Y")).days)
             ll.append(book[0].uid.title)
-            fine.append((datetime.strptime(curDTSTR, "%m/%d/%Y")-datetime.strptime(date_time, "%m/%d/%Y")).days*5)
-
+            total_fine=(datetime.strptime(curDTSTR, "%m/%d/%Y")-datetime.strptime(date_time, "%m/%d/%Y")).days*5
+            if total_fine < 0:
+                total_fine=0
+            fine.append(total_fine)
+        collect_list=zip(ll,fine)
+        #student details
+        sname=request.user.first_name+" " +request.user.last_name
+        sdept=student_profile.dept
+        sphone_number=student_profile.phone_number
+        sregistration_no=student_profile.registration_no
+        saddress=student_profile.address
         total_count = len(ll)
+        print("list count")
         print(ll)
 
-    return render(request,'student.html', {"list":ll,"fine":fine, "total_count":total_count,"name":request.user.first_name+" " +request.user.last_name +"  "+ "  "+student_profile.dept})
+    return render(request,'student.html', {"list":ll,"fine":fine,"collect_list":collect_list, "total_count":total_count,"name":sname,"dept":sdept,"sphonenumber":sphone_number,"registration_no":sregistration_no,"address":saddress})
 
 
 @login_required(login_url='login')
