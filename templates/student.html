@@ -18,14 +18,20 @@
 <ul class="list-unstyled">
       <li class="card col-md-9 mb-3 pl-4 p-3" style="background-color: #88a3c1;">
           <h5>{{name}}</h5>
+          <h5>{{dept}}</h5>
+          <h5>{{sphonenumber}}</h5>
+          <h5>{{registration_no}}</h5>
+          <h5>{{sdress}}</h5>
+
       </li>
 
-    {% for i in list %}
+    {% for i,j in collect_list %}
 
        {% if total_count %}
 
         <li class="card col-md-9 mb-3 pl-4 p-3">
           <h5>{{i}}</h5>
+            <h5>{{j}}</h5>
 
 
 
